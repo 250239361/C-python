@@ -1,0 +1,32 @@
+import socket
+import time
+
+if __name__ == '__main__':
+    #创建server，使用IPv4（AF_INET），使用TCP协议（SOCK_STREAM）。
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #将服务器绑定在本地端口8888.
+    server.bind(("localhost", 8888))
+    #无限监听该窗口
+    server.listen(0)
+    connection, address = server.accept()
+    print(connection, address)
+    num = 0
+    while True:
+        # connection, address = server.accept()serverIPV
+
+        # print(connection, address)
+        #从connection中获取1024个字节的前五个字节。
+        recv_str = connection.recv(1024)[0:5]
+        print("enter 1")
+        #ascii解码
+        recv_str = recv_str.decode("ascii")
+        if not recv_str:
+            break
+        num = num + 1
+        print(recv_str, num)
+        #发送字符
+        connection.send(bytes("clientRecv: %s," % recv_str, encoding="ascii"))
+        time.sleep(0.5)
+
+    connection.close()
+    input("enter end")
